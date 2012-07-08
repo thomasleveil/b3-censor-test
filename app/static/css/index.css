@@ -1,6 +1,20 @@
-#config_content {
-    width: 100%;
-    height: 300px;
+h2 {
+    margin-top: 0;
+}
+
+#config_content, #log_config {
+    float: left;
+    width: 49%;
+    height: 280px;
+}
+
+#log_config, #chat_consequences {
+    font-size: .8em;
+    overflow: auto;
+    border: solid 1px #9AACAE;
+    font-family: consolas,courier,Georgia,Serif;
+    background: #EFEFEF;
+    padding: 5px;
 }
 
 #chat {

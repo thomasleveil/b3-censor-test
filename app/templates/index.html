@@ -15,21 +15,23 @@
 {% block content %}
 
 <section>
-    <header>
-        <h1>Welcome on the online tester for the BigBrotherBot (B3) Censor plugin.</h1>
-    </header>
-
     <form action="#" method="post">
         <p>
-            <label for="config_content">plugin_censor.xml</label>
+            <h2>Censor plugin config zone</h2>
+            <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
+            <pre id="log_config">{{ log_config }}</pre>
         </p>
-        <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
+
+        <hr style="clear:both"/>
 
         <p>
-            <label for="chat">chat zone</label>
-            <input name="chat" id="chat" type="text" required/>
+            <h2>Test zone</h2>
+            <label for="chat">Joe says </label>
+            <input name="chat" id="chat" type="text" required value="{{ chat_text }}"/>
             <input type="submit" value="send" />
         </p>
+
+        <pre id="chat_consequences">{{ chat_consequences }}</pre>
     </form>
 
 </section>
