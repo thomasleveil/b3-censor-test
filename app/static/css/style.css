@@ -97,15 +97,3 @@ div[role="main"] {
     position: absolute;
     right: 15px;
 }
-
-#page-footer .validator_logo {
-    position: absolute;
-    left: 15px;
-    bottom: 55px;
-}
-
-#page-footer .validator_logo_css {
-    position: absolute;
-    left: 108px;
-    bottom: 55px;
-}

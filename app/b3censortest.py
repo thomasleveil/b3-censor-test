@@ -14,10 +14,11 @@ from b3.plugins.censor import CensorPlugin
 from b3.fake import FakeConsole, FakeClient
 from b3.functions import minutesStr
 from b3.events import VetoEvent
+from b3 import __file__ as b3_module__file__
 
 b3log = logging.getLogger('output')
 
-with open(os.path.join(os.path.dirname(__file__), 'etc/plugin_censor.xml')) as default_config_file:
+with open(os.path.join(os.path.dirname(b3_module__file__), 'conf/plugin_censor.xml')) as default_config_file:
     default_config_content = default_config_file.read()
 
 
@@ -35,7 +36,6 @@ def index():
     config_content = None
     chat_text = ''
     chat_consequences = ''
-    badword_detected = False
 
     if request.method == 'POST':
 
@@ -64,6 +64,7 @@ def index():
         chat_text = request.form['chat']
 
         if config_content is not None:
+            # we got a config to test
             censor_conf.loadFromString(config_content)
             b3log_file.truncate(0)
             b3log.info("--------- loading Censor plugin config ----------")
@@ -74,11 +75,12 @@ def index():
             b3log_file.truncate(0)
 
             if chat_text is not None:
+                # we got some chat to check for badwords
                 b3log_file.truncate(0)
                 try:
                     censor_plugin.checkBadWord(text=chat_text, client=joe)
                 except VetoEvent:
-                    badword_detected = True
+                    pass
                 b3log_file.seek(0)
                 chat_consequences = b3log_file.read()
                 b3log_file.truncate(0)
@@ -90,9 +92,7 @@ def index():
 
 
 def penalizeClient(penalty, client, data=''):
-    """\
-    This is the default penalisation for using bad language in say and teamsay
-    """
+    """ monkey patch the censor plugin """
     b3log.info("Joe gets penalized with a %s" % penalty.type)
     b3log.info("duration: %s" % minutesStr(penalty.duration))
     b3log.info("reason : %s" % penalty.reason)
