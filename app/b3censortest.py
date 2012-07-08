@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import os
 from flask import Flask
 from flask.templating import render_template
 
@@ -10,7 +11,9 @@ def page_not_found(error):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open(os.path.join(os.path.dirname(__file__), 'etc/plugin_censor.xml')) as default_config_file:
+        default_config_content = default_config_file.read()
+    return render_template('index.html', config_content=default_config_content)
 
 if __name__ == '__main__':
     app.debug = True

@@ -3,6 +3,12 @@
 {% block title %}{{ super() }}{% endblock %}
 {% block meta_description %}{{ super() }}{% endblock %}
 
+
+{% block stylesheets %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {% block head_title %}{{ super() }}{% endblock %}
 {% block head_description %}{{ super() }}{% endblock %}
 
@@ -10,10 +16,22 @@
 
 <section>
     <header>
-        <p>Welcome on the online tester for the BigBrotherBot (B3) Censor plugin.</p>
+        <h1>Welcome on the online tester for the BigBrotherBot (B3) Censor plugin.</h1>
     </header>
 
-    <p>bla</p>
+    <form action="#" method="post">
+        <p>
+            <label for="config_content">plugin_censor.xml</label>
+        </p>
+        <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
+
+        <p>
+            <label for="chat">chat zone</label>
+            <input name="chat" id="chat" type="text" required/>
+            <input type="submit" value="send" />
+        </p>
+    </form>
+
 </section>
 
 {% endblock %}
