@@ -32,6 +32,30 @@ This project has been tested on a [virtualenv](http://pypi.python.org/pypi/virtu
 - wsgiref==0.1.2
 
 
+### Virtualenv setup
+
+Follow the commands below to install the website in directory /var/www/b3-censor-plugin/
+
+    mkdir /var/www/b3-censor-test
+    cd /var/www/b3-censor-test
+
+    # get the files
+    wget https://github.com/courgette/b3-censor-test/zipball/master -O b3-censor-test.zip
+    mv courgette-b3-censor-test-e2c36e4/* .
+    rm -r courgette-b3-censor-test-e2c36e4/
+
+    # create a virtualenv and install dependencies
+    virtualenv env
+    . env/bin/activate
+    pip install -r requirements.txt
+
+    # test the website
+    python app/b3censortest.py
+
+If all those steps are followed you can test the website connecting to http://127.0.0.1:5000
+
+
+
 ### Apache2 webserver configuration
 
 This website can run under Apache2 with the mod_wsgi module.
