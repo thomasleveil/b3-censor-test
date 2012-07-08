@@ -1,0 +1,111 @@
+body {
+    background:url("../img/bg.jpg") no-repeat -300px 250px;
+    /*background-color: #FFF;*/
+    margin:0;
+}
+
+div[role="main"] {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#page-header {
+    background-color:#222;
+    margin-bottom:20px;
+    width:100%;
+    height:150px;
+    border-bottom: 10px solid #C1930B;
+    position:relative;
+    z-index:0;
+}
+
+#page-header .b3logo  {
+    background:url("../img/b3_logo.png") no-repeat scroll left top transparent;
+    height:150px;
+    left:0;
+    position:absolute;
+    top:0px;
+    width:350px;
+    z-index:1;
+}
+
+#page-header .header_right  {
+    background:url("../img/header_right.png") no-repeat scroll left top transparent;
+    height:150px;
+    right:0;
+    position:absolute;
+    top:0px;
+    width:350px;
+    z-index:1;
+}
+
+#page-header .header_text {
+    font-family: "Trebuchet MS";
+    font-size:200%;
+    font-weight:bold;
+    color:#FFF;
+    position:absolute;
+    text-align:center;
+    width:100%;
+    top:50px;
+    z-index:2;
+}
+
+#page-header .header_note {
+    font-family: "Trebuchet MS";
+    font-size:75%;
+    font-weight:bold;
+    color:#FFF;
+    position:absolute;
+    text-align:center;
+    width:100%;
+    top:90px;
+    z-index:2;
+}
+
+
+#page-footer {
+    background: #666;
+    margin-top: 80px;
+    width: 100%;
+    height: 40px;
+    border-top: 4px solid #C1930B;
+    position: relative;
+}
+
+#page-footer .footer_text {
+    font-family: Verdana;
+    font-size: 8pt;
+    color: #FFF;
+    padding: 10px;
+}
+
+#page-footer .footer_text a {
+    font-family: Verdana;
+    color: #FFF;
+    text-decoration: none;
+}
+
+#page-footer .footer_text a:hover {
+    text-decoration: underline;
+}
+
+#page-footer .copyright {
+    font-family: Verdana;
+    color: #FFF;
+    position: absolute;
+    right: 15px;
+}
+
+#page-footer .validator_logo {
+    position: absolute;
+    left: 15px;
+    bottom: 55px;
+}
+
+#page-footer .validator_logo_css {
+    position: absolute;
+    left: 108px;
+    bottom: 55px;
+}
