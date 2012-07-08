@@ -42,5 +42,5 @@ Refer to the doc/apache_vhost.conf file for an example of Apache2 virtualhost co
 References
 ----------
 
-BigBrotherBot: http://www.bigbrotherbot.net
-Censor plugin documentation: http://wiki.bigbrotherbot.net/usage:censor_plugin
+- BigBrotherBot: http://www.bigbrotherbot.net
+- Censor plugin documentation: http://wiki.bigbrotherbot.net/usage:censor_plugin
