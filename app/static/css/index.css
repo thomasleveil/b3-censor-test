@@ -9,22 +9,37 @@ h2 {
 #config_test, #chat_test, #playername_test {
     border: 1px solid #b8860b;
     background-color: #f5f5f5;
-    padding: 15px;
+    padding: 11px;
     border-radius: 15px;
     margin: 3px;
 }
 
 #config_test {
     display: block;
-    height: 280px;
+    height: 300px;
 }
 
 #config_content, #log_config {
-    width: 48%;
-    height: 270px;
     margin-left: 5px;
     margin-right: 5px;
     padding: 5px;
+}
+
+#config_content {
+    width: 59%;
+    height: 260px;
+}
+
+#log_config {
+    width: 39%;
+    height: 290px;
+}
+
+.CodeMirror {
+    width: 59%;
+    float: left;
+    border: 1px double #add8e6;
+    margin: 0;
 }
 
 #log_config {
