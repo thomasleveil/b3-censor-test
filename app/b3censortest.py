@@ -11,7 +11,7 @@ from mock import patch
 app = Flask(__name__)
 
 
-from b3.config import XmlConfigParser
+from b3.config import XmlConfigParser, ConfigFileNotValid
 from b3.plugins.censor import CensorPlugin
 from b3.fake import FakeConsole, FakeClient
 from b3.functions import minutesStr
@@ -63,6 +63,7 @@ def index():
         # add our log handler to collect B3 log messages
         b3log_handler = logging.StreamHandler(b3log_file)
         b3log.addHandler(b3log_handler)
+        b3log.setLevel(logging.DEBUG)
 
         # read form data
         config_content = request.form['config_content']
@@ -71,38 +72,45 @@ def index():
 
         if config_content is not None:
             # we got a config to test
-            censor_conf.loadFromString(config_content)
             b3log_file.truncate(0)
             b3log.info("--------- loading Censor plugin config ----------")
-            censor_plugin.onLoadConfig()
-            b3log.info("--------- Censor plugin config loaded ----------")
-            b3log_file.seek(0)
-            config_log_content = b3log_file.read()
-            b3log_file.truncate(0)
-
-            if chat_text:
-                # we got some chat to check for badwords
-                b3log_file.truncate(0)
-                try:
-                    censor_plugin.checkBadWord(text=chat_text, client=joe)
-                except VetoEvent:
-                    pass
+            try:
+                censor_conf.loadFromString(config_content)
+            except ConfigFileNotValid, err:
+                b3log.error("bad config file format : %r" % err)
                 b3log_file.seek(0)
-                chat_consequences = b3log_file.read()
-                b3log_file.truncate(0)
-
-            if playername_text:
-                # we got some player name to check for badnames
-                b3log_file.truncate(0)
-                try:
-                    joe.name = playername_text
-                    with patch.object(threading, 'Timer'): # prevent the Censor plugin to check again every minute
-                        censor_plugin.checkBadName(client=joe)
-                except VetoEvent:
-                    pass
+                config_log_content = b3log_file.read()
+            except Exception, err:
+                b3log.error("Unexpected error : %r" % err)
                 b3log_file.seek(0)
-                playername_consequences = b3log_file.read()
-                b3log_file.truncate(0)
+                config_log_content = b3log_file.read()
+            else:
+                censor_plugin.onLoadConfig()
+                b3log.info("--------- Censor plugin config loaded ----------")
+                b3log_file.seek(0)
+                config_log_content = b3log_file.read()
+
+                if chat_text:
+                    # we got some chat to check for badwords
+                    b3log_file.truncate(0)
+                    try:
+                        censor_plugin.checkBadWord(text=chat_text, client=joe)
+                    except VetoEvent:
+                        pass
+                    b3log_file.seek(0)
+                    chat_consequences = b3log_file.read()
+
+                if playername_text:
+                    # we got some player name to check for badnames
+                    b3log_file.truncate(0)
+                    try:
+                        joe.name = playername_text
+                        with patch.object(threading, 'Timer'): # prevent the Censor plugin to check again every minute
+                            censor_plugin.checkBadName(client=joe)
+                    except VetoEvent:
+                        pass
+                    b3log_file.seek(0)
+                    playername_consequences = b3log_file.read()
     else:
         if config_content is None:
             config_content = default_config_content
