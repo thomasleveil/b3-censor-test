@@ -16,22 +16,30 @@
 
 <section>
     <form action="#" method="post">
-        <p>
-            <h2>Censor plugin config zone</h2>
+        <h2>Censor plugin config zone</h2>
+
+        <section id="config_test">
             <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
-            <pre id="log_config">{{ log_config }}</pre>
-        </p>
+            <pre id="log_config" class="log">{{ log_config }}</pre>
+        </section>
 
-        <hr style="clear:both"/>
 
-        <p>
-            <h2>Test zone</h2>
+        <h2>Test zone</h2>
+        <section id="chat_test">
             <label for="chat">Joe says </label>
-            <input name="chat" id="chat" type="text" required value="{{ chat_text }}"/>
+            <input name="chat" id="chat" type="text" value="{{ chat_text }}"/>
             <input type="submit" value="send" />
-        </p>
+            <pre id="chat_consequences" class="log">{{ chat_consequences }}</pre>
+        </section>
 
-        <pre id="chat_consequences">{{ chat_consequences }}</pre>
+        <section id="playername_test">
+            <label for="playername">Test player name </label>
+            <input name="playername" id="playername" type="text" value="{{ playername_text }}"/>
+            <input type="submit" value="send" />
+            <pre id="playername_consequences" class="log">{{ playername_consequences }}</pre>
+        </section>
+
+
     </form>
 
 </section>

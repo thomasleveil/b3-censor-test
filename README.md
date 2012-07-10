@@ -2,7 +2,8 @@ B3 Censor plugin online tester
 ==============================
 
 This projects provides a website that aims to help users of BigBrotherBot (B3) to configure the Censor plugin.
-The Censor plugin has one of the most difficult configuration file of the B3 project and hopefully this website will help users avoid configuration errors and reduce the time required to add and test new badword rules.
+The Censor plugin has one of the most difficult configuration file of the B3 project and hopefully this website will
+help users avoid configuration errors and reduce the time required to add and test new badword and badname rules.
 
 
 Test it live
@@ -19,6 +20,7 @@ Installation
 
 - [python 2.7](www.python.org)
 - [flask](http://pypi.python.org/pypi/Flask/)
+- [mock](http://pypi.python.org/pypi/mock/)
 - [b3](http://pypi.python.org/pypi/b3/)
 
 
@@ -29,6 +31,7 @@ This project has been tested on a [virtualenv](http://pypi.python.org/pypi/virtu
 - Werkzeug==0.8.3
 - argparse==1.2.1
 - b3==1.8.2
+- mock==0.8.0
 - wsgiref==0.1.2
 
 

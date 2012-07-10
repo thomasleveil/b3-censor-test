@@ -1,10 +1,12 @@
 # -*- encoding: utf-8 -*-
 import logging
+import threading
 import os
 from flask import Flask
 from flask.globals import request
 from flask.templating import render_template
 from StringIO import StringIO
+from mock import patch
 
 app = Flask(__name__)
 
@@ -36,6 +38,8 @@ def index():
     config_content = None
     chat_text = ''
     chat_consequences = ''
+    playername_text = ''
+    playername_consequences = ''
 
     if request.method == 'POST':
 
@@ -54,6 +58,7 @@ def index():
         # monkey patch the Censor plugin penalizeClient method to log its actions
         # and remove a dependy over the admin plugin
         censor_plugin.penalizeClient = penalizeClient
+        censor_plugin.penalizeClientBadname = penalizeClientBadname
 
         # add our log handler to collect B3 log messages
         b3log_handler = logging.StreamHandler(b3log_file)
@@ -62,6 +67,7 @@ def index():
         # read form data
         config_content = request.form['config_content']
         chat_text = request.form['chat']
+        playername_text = request.form['playername']
 
         if config_content is not None:
             # we got a config to test
@@ -74,7 +80,7 @@ def index():
             config_log_content = b3log_file.read()
             b3log_file.truncate(0)
 
-            if chat_text is not None:
+            if chat_text:
                 # we got some chat to check for badwords
                 b3log_file.truncate(0)
                 try:
@@ -84,19 +90,51 @@ def index():
                 b3log_file.seek(0)
                 chat_consequences = b3log_file.read()
                 b3log_file.truncate(0)
+
+            if playername_text:
+                # we got some player name to check for badnames
+                b3log_file.truncate(0)
+                try:
+                    joe.name = playername_text
+                    with patch.object(threading, 'Timer'): # prevent the Censor plugin to check again every minute
+                        censor_plugin.checkBadName(client=joe)
+                except VetoEvent:
+                    pass
+                b3log_file.seek(0)
+                playername_consequences = b3log_file.read()
+                b3log_file.truncate(0)
     else:
         if config_content is None:
             config_content = default_config_content
 
-    return render_template('index.html', config_content=config_content, chat_text=chat_text, log_config=config_log_content, chat_consequences=chat_consequences)
+    return render_template('index.html',
+        config_content=config_content, log_config=config_log_content,
+        chat_text=chat_text, chat_consequences=chat_consequences,
+        playername_text=playername_text,
+        playername_consequences=playername_consequences
+    )
 
 
 def penalizeClient(penalty, client, data=''):
     """ monkey patch the censor plugin """
     b3log.info("Joe gets penalized with a %s" % penalty.type)
-    b3log.info("duration: %s" % minutesStr(penalty.duration))
-    b3log.info("reason : %s" % penalty.reason)
-    b3log.info("reasonkeyword : %s" % penalty.keyword)
+    if penalty.duration:
+        b3log.info("\tduration: %s" % minutesStr(penalty.duration))
+    if penalty.reason:
+        b3log.info("\treason: %s" % penalty.reason)
+    if penalty.keyword:
+        b3log.info("\treasonkeyword: %s" % penalty.keyword)
+
+
+def penalizeClientBadname(penalty, client, data=''):
+    """ monkey patch the censor plugin """
+    b3log.info("%s gets penalized with a %s" % (client.name, penalty.type))
+    if penalty.duration:
+        b3log.info("\tduration: %s" % minutesStr(penalty.duration))
+    if penalty.reason:
+        b3log.info("\treason: %s" % penalty.reason)
+    if penalty.keyword:
+        b3log.info("\treasonkeyword: %s" % penalty.keyword)
 
 if __name__ == '__main__':
     app.debug = True
