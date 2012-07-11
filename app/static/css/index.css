@@ -67,3 +67,12 @@ h2 {
     width: 400px;
     padding-right: 15px;
 }
+
+#version_info {
+    clear: left;
+    padding-top: 20px;
+    margin-left: 5px;
+    font-family: tahoma;
+    font-size: .7em;
+    color: gray;
+}

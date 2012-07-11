@@ -40,8 +40,14 @@
             <pre id="playername_consequences" class="log">{{ playername_consequences }}</pre>
         </section>
 
-
     </form>
+
+    {% if b3_version %}
+    <p id="version_info">
+        Test done with B3 v{{ b3_version }}
+        {% if censor_version %}, censor plugin v{{ censor_version }} {% endif %}
+    </p>
+    {% endif %}
 
 </section>
 

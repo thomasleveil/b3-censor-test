@@ -12,11 +12,11 @@ app = Flask(__name__)
 
 
 from b3.config import XmlConfigParser, ConfigFileNotValid
-from b3.plugins.censor import CensorPlugin
+from b3.plugins.censor import CensorPlugin, __version__ as censor_version
 from b3.fake import FakeConsole, FakeClient
 from b3.functions import minutesStr
 from b3.events import VetoEvent
-from b3 import __file__ as b3_module__file__
+from b3 import __file__ as b3_module__file__, __version__ as b3_version
 
 b3log = logging.getLogger('output')
 
@@ -119,7 +119,9 @@ def index():
         config_content=config_content, log_config=config_log_content,
         chat_text=chat_text, chat_consequences=chat_consequences,
         playername_text=playername_text,
-        playername_consequences=playername_consequences
+        playername_consequences=playername_consequences,
+        b3_version=b3_version,
+        censor_version=censor_version
     )
 
 
