@@ -10,6 +10,11 @@ from mock import patch
 
 app = Flask(__name__)
 
+import b3.output # set the Logger Class to b3.output.OutputHandler
+b3log = logging.getLogger('output')
+b3log.disabled = True
+b3log.propagate = False
+
 
 from b3.config import XmlConfigParser, ConfigFileNotValid
 from b3.plugins.censor import CensorPlugin, __version__ as censor_version
@@ -17,8 +22,6 @@ from b3.fake import FakeConsole, FakeClient
 from b3.functions import minutesStr
 from b3.events import VetoEvent
 from b3 import __file__ as b3_module__file__, __version__ as b3_version
-
-b3log = logging.getLogger('output')
 
 with open(os.path.join(os.path.dirname(b3_module__file__), 'conf/plugin_censor.xml')) as default_config_file:
     default_config_content = default_config_file.read()
@@ -47,6 +50,8 @@ def index():
         b3bot_conf = XmlConfigParser()
         b3bot_conf.loadFromString('<configuration/>')
         b3bot = FakeConsole(b3bot_conf)
+        b3bot.screen = b3log_file
+
 
         # create a Censor plugin instance
         censor_conf = XmlConfigParser()
@@ -61,9 +66,12 @@ def index():
         censor_plugin.penalizeClientBadname = penalizeClientBadname
 
         # add our log handler to collect B3 log messages
+        b3log.handlers = []
         b3log_handler = logging.StreamHandler(b3log_file)
         b3log.addHandler(b3log_handler)
         b3log.setLevel(logging.DEBUG)
+
+        b3bot.log.disabled = False
 
         # read form data
         config_content = request.form['config_content']
