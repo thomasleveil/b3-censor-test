@@ -6,50 +6,152 @@
 
 {% block stylesheets %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='js/libs/codemirror/codemirror.css') }}">
+    <style type="text/css">
+        @font-face {
+            font-family: 'SourceCodePro';
+            src: url('{{ url_for('static', filename='font/SourceCodePro-Regular.ttf') }}');
+        }
+
+        #version_info {
+            clear: left;
+            padding-top: 20px;
+            margin-left: 5px;
+            font-family: tahoma;
+            font-size: .7em;
+            color: gray;
+        }
+
+        #log_config {
+            min-height: 340px;
+            font-family: 'SourceCodePro', monospace;
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        #chat_consequences, #playername_consequences {
+            min-height: 60px;
+        }
+
+        .CodeMirror {
+            font-family: 'SourceCodePro', monospace;
+            font-size: 12px;
+            line-height: 16px;
+
+            /* Necessary so the scrollbar can be absolutely positioned within the wrapper on Lion. */
+            position: relative;
+            /* This prevents unwanted scrollbars from showing up on the body and wrapper in IE. */
+            overflow: hidden;
+            background-color: white;
+            width: 670px;
+
+            /* Copied from Bootstrap's textarea */
+            display: inline-block;
+            padding: 4px 6px;
+            margin-bottom: 9px;
+            color: #555555;
+            border: 1px solid #ccc;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+            -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+            -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+            -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+            transition: border linear 0.2s, box-shadow linear 0.2s;
+        }
+
+        .CodeMirror-scroll, .CodeMirror-scrollbar {
+            height: 351px;
+        }
+
+        .CodeMirror-focused {
+            /* Copied from Bootstrap's textarea */
+            border-color: rgba(82, 168, 236, 0.8);
+            outline: 0;
+            outline: thin dotted \9;
+            /* IE6-9 */
+
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+    </style>
 {% endblock %}
 
 {% block head_title %}{{ super() }}{% endblock %}
 {% block head_description %}{{ super() }}{% endblock %}
 
 {% block content %}
+<div class="container">
 
-<section>
-    <form action="#" method="post">
-        <h2>Censor plugin config zone</h2>
+    <form action="#results" method="post" class="form-inline">
 
-        <section id="config_test">
-            <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
-            <pre id="log_config" class="log">{{ log_config }}</pre>
-        </section>
+        <div class="row">
+            <div class="span7">
+                <h2>Censor plugin config&nbsp;<span class="icon-wrench"></span></h2>
+                <div>
+                    <textarea name="config_content" id="config_content" required>{{ config_content }}</textarea>
+                </div>
+            </div>
+            <div class="span5">
+                <h2>Log file&nbsp;<span class="icon-list"></span></h2>
+                <pre id="log_config" class="log pre-scrollable">{{ log_config }}</pre>
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="span12" id="results">
+                <h2>Test zone&nbsp;<span class="icon-refresh"></span></h2>
 
-        <h2>Test zone</h2>
-        <section id="chat_test">
-            <label for="chat">Joe says </label>
-            <input name="chat" id="chat" type="text" value="{{ chat_text }}"/>
-            <input type="submit" value="send" />
-            <pre id="chat_consequences" class="log">{{ chat_consequences }}</pre>
-        </section>
+                <div class="row">
 
-        <section id="playername_test">
-            <label for="playername">Test player name </label>
-            <input name="playername" id="playername" type="text" value="{{ playername_text }}"/>
-            <input type="submit" value="send" />
-            <pre id="playername_consequences" class="log">{{ playername_consequences }}</pre>
-        </section>
+                    <div class="span6">
+                        <div class="control-group">
+                            <label for="chat" class="control-label">Joe says </label>
+                            <div class="controls">
+                                <input name="chat" id="chat" type="text" value="{{ chat_text }}"/>
+                                <button type="submit" value="send" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                        <pre id="chat_consequences" class="log">{{ chat_consequences }}</pre>
+                    </div>
+
+                    <div class="span6">
+                        <div class="control-group">
+                            <label for="playername" class="control-label">Test player name </label>
+                            <div class="controls">
+                                <input name="playername" id="playername" type="text" value="{{ playername_text }}"/>
+                                <button type="submit" value="send" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                        <pre id="playername_consequences" class="log">{{ playername_consequences }}</pre>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </form>
 
-    {% if b3_version %}
-    <p id="version_info">
-        Test done with B3 v{{ b3_version }}
-        {% if censor_version %}, censor plugin v{{ censor_version }} {% endif %}
-    </p>
-    {% endif %}
 
-</section>
+    <div class="row">
+        <div class="span12">
+
+        {% if b3_version %}
+        <p id="version_info">
+            Test done with B3 v{{ b3_version }}
+            {% if censor_version %}, censor plugin v{{ censor_version }} {% endif %}
+        </p>
+        {% endif %}
+
+        </div>
+    </div>
+
+</div>
 
 {% endblock %}
 
@@ -73,6 +175,16 @@
                     "Ctrl-Q": function(cm){foldFunc_xml(cm, cm.getCursor().line);},
                 }
             });
+        });
+
+        function tail_log() {
+            var h = $('#log_config').get(0).scrollHeight;
+            $('#log_config').animate({scrollTop: h}, 500);
+        }
+
+        $(document).ready(function(){
+            $('#log_config').change(tail_log);
+            tail_log();
         });
     </script>
 {% endblock %}
