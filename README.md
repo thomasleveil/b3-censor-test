@@ -43,9 +43,10 @@ Follow the commands below to install the website in directory /var/www/b3-censor
     cd /var/www/b3-censor-test
 
     # get the files
-    wget https://github.com/thomasleveil/b3-censor-test/zipball/master -O b3-censor-test.zip
-    mv courgette-b3-censor-test-e2c36e4/* .
-    rm -r courgette-b3-censor-test-e2c36e4/
+    wget https://github.com/thomasleveil/b3-censor-test/zipball/master -O b3-censor-test.zip --no-check-certificate
+    unzip b3-censor-test.zip
+    mv thomasleveil-b3-censor-test-dcb3602/* .
+    rm -r thomasleveil-b3-censor-test-dcb3602/
 
     # create a virtualenv and install dependencies
     virtualenv env
