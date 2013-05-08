@@ -32,10 +32,10 @@ os.chdir(this_dir)
 
 from b3censortest import app
 
-@werkzeug.serving.run_with_reloader
-def runServer():
-    app.debug = False
-
-    ws = gevent.wsgi.WSGIServer(('127.0.0.1', 5025), app)
-    ws.serve_forever()
+# @werkzeug.serving.run_with_reloader
+# def runServer():
+    # app.debug = False
+    # ws = gevent.wsgi.WSGIServer(('127.0.0.1', 5025), app)
+    # ws.serve_forever()
     
+werkzeug.serving.run_simple('127.0.0.1', 5025, app, use_reloader=False)
