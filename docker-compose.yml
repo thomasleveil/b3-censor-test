@@ -1,0 +1,15 @@
+version: "2.1"
+
+services:
+
+  web:
+    build: .
+    restart: always
+    expose:
+      - 8000
+    healthcheck:
+      test: bash -c "</dev/tcp/127.0.0.1/8000"
+    labels:
+      traefik.enable: "true"
+      traefik.port: "8000"
+      traefik.frontend.rule: "Host:b3-censor-test.cucurb.net"

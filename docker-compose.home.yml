@@ -1,0 +1,9 @@
+version: "2.1"
+
+services:
+
+  web:
+    restart: "no"
+    labels:
+      traefik.frontend.rule: "Host:b3-censor-test.docker.localhost"
+

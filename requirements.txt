@@ -1,3 +1,3 @@
 flask
-b3
+-e git+git://github.com/BigBrotherBot/big-brother-bot.git#egg=b3
 mock
